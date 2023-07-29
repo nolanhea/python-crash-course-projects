@@ -19,10 +19,10 @@ class AlienInvasion:
     def run_game(self):
         """Start the main loop fo the game"""
         while True:
-            time.sleep(0.005)
+            time.sleep(0.0005)
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
 
 
@@ -55,6 +55,14 @@ class AlienInvasion:
             self.ship.moving_right = False
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+
+    def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets"""
+        self.bullets.update()
+
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
