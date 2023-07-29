@@ -1,1 +1,1 @@
-##Implementation of projects from Python Crash Course textbook
+## Implementation of projects from Python Crash Course textbook
