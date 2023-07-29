@@ -26,7 +26,9 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
+
 
     def _create_fleet(self):
         """Create the fleet of Aliens"""
@@ -54,6 +56,20 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
+
+    def check_fleet_edges(self):
+        """Respond appropriately if any of the aliens have reached edge"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                print('KEKW')
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change the fleet direction"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _check_events(self):
         # Watch the keyboard and mouse events.
@@ -93,6 +109,11 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+    def _update_aliens(self):
+        """Update positions of all aliens in the fleet"""
+        self.check_fleet_edges()
+        self.aliens.update()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
